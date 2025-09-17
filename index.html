@@ -225,7 +225,7 @@ window.MathJax = {
       const randomIndex = Math.floor(Math.random() * formulas.length);
       currentFormula = formulas[randomIndex];
 
-      document.getElementById("originalFormula").innerHTML = `${currentFormula.expression}`;
+      document.getElementById("originalFormula").innerHTML = `${currentFormula.expression}$`;
       document.getElementById("solveFor").textContent = `${currentFormula.solve}$`;
       MathJax.typeset();
 
