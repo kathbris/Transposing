@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Formula Transposition Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+    }
+    .toolbox, .workspace, .trash {
+      border: 2px dashed #ccc;
+      padding: 10px;
+      min-height: 60px;
+      margin-bottom: 20px;
+    }
+    .draggable {
+      display: inline-block;
+      padding: 8px 12px;
+      margin: 5px;
+      background-color: #f0f0f0;
+      border: 1px solid #999;
+      cursor: move;
+    }
+    .workspace {
+      background-color: #fafafa;
+    }
+    .trash {
+      background-color: #ffe6e6;
+      border-color: #ff9999;
+      color: #cc0000;
+    }
+    #formulaDisplay {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    #preview {
+      font-size: 1.2em;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #eef;
+      border: 1px solid #99c;
+    }
+    button {
+      padding: 8px 12px;
+      margin-top: 10px;
+    }
+    #steps {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-left: 4px solid #00A3E0;
+    }
+  </style>
+
+  <!-- ✅ Correct MathJax v3 script -->
+  <script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  svg: { fontCache: 'global' }
+};
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+  <h1>Formula Transposition Practice</h1>
+  <div id="formulaDisplay">
+    Original Formula: <span id="originalFormula"></span><br>
+    Solve for: <span id="solveFor"></span>
+  </div>
+
+  <div class="toolbox" id="toolbox">
+    <strong>Toolbox:</strong><br>
+  </div>
+
+  <div class="workspace" id="workspace" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <strong>Drag items here to build your formula:</strong>
+  </div>
+
+  <div class="trash" id="trash" ondrop="deleteItem(event)" ondragover="allowDrop(event)">
+    <strong>🗑️ Drag here to delete items from workspace</strong>
+  </div>
+
+  <div id="preview"><strong>Live Preview:</strong> <span id="mathPreview"></span></div>
+
+  <button onclick="checkVisualAnswer()">Check Answer</button>
+  <button onclick="generateVisualFormula()">New Formula</button>
+  <p id="feedback"></p>
+  <div id="steps"></div>
+
+  <script>
+    const formulas = [ 
+      {
+        expression: "A = B + C - D",
+        solve: "C",
+        solution: "C=A-B+D",
+        items: ["A", "B", "C", "D", "+", "-", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ A = B + C - D $$",
+          "Add $D$ to both sides: $$ A + D = B + C $$",
+          "Subtract $B$ from both sides: $$ A + D - B = C $$",
+          "Rearranged: $$ C = A - B + D $$"
+        ]
+      },
+      {
+        expression: "V = l * w * h",
+        solve: "h",
+        solution: "h=V/(l*w)",
+        items: ["V", "l", "w", "h", "*", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ V = l * w * h $$",
+          "Divide both sides by $l * w$ : $$ \\frac {V}{l * w} = h $$",
+          "Rearranged: $$ h = \\frac {V}{l * w} $$"
+        ]
+      },
+      {
+        expression: "F = m * a",
+        solve: "m",
+        solution: "m=F/a",
+        items: ["F", "m", "a", "*", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ F = m * a $$",
+          "Divide both sides by $a$: $$ \\frac Fa = m $$",
+          "Rearranged: $$ m = \\frac Fa $$"
+        ]
+      },
+      {
+        expression: "P = V^2 / R",
+        solve: "R",
+        solution: "R=V^2/P",
+        items: ["P", "V", "R", "^2", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ P = \\frac {V^2}{R} $$",
+          "Multiply both sides by $R$: $$ P * R = V^2 $$",
+          "Divide both sides by $P$: $$ R = \\frac {V^2}{P} $$"
+        ]
+      },
+      {
+        expression: "Q = m * c * ΔT",
+        solve: "ΔT",
+        solution: "ΔT=Q/(m*c)",
+        items: ["Q", "m", "c", "ΔT", "*", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ Q = m * c * ΔT $$",
+          "Divide both sides by $m * c$:  $$\\frac {Q}{m * c} = ΔT $$",
+          "Rearranged: $$ ΔT = \\frac {Q}{m * c} $$"
+        ]
+      },
+      {
+        expression: "V = I * R",
+        solve: "R",
+        solution: "R=V/I",
+        items: ["V", "I", "R", "*", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ V = I * R $$",
+          "Divide both sides by $I$ : $$ \\frac VI = R $$",
+          "Rearranged:$$ R = \\frac VI $$"
+        ]
+      },
+      {
+        expression: "P = I * V",
+        solve: "I",
+        solution: "I=\\frac PV",
+        items: ["P", "I", "V", "*", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ P = I * V $$",
+          "Divide both sides by V: $$ \\frac PV = I $$",
+          "Rearranged: $$ I = \\frac PV $$"
+        ]
+      },
+      {
+        expression: "c^2 = a^2 + b^2",
+        solve: "b",
+        solution: "b=√(c^2-a^2)",
+        items: ["a", "b", "c","^2", "+", "-", "=", "√", "(", ")"],
+        steps: [
+          "Start with the formula: $$ c^2 = a^2 + b^2 $$",
+          "Subtract $ a^2 $ from both sides: $$ c^2 - a^2 = b^2 $$",
+          "Take the square root of both sides: $$ b = \\sqrt{c^2 - a^2} $$"
+        ]
+      }
+    ];
+
+    let currentFormula = {};
+    let draggedElement = null;
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      draggedElement = ev.target;
+      ev.dataTransfer.setData("text/plain", "");
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      if (draggedElement && draggedElement.parentElement.id === "toolbox") {
+        const clone = draggedElement.cloneNode(true);
+        clone.draggable = true;
+        clone.className = "draggable";
+        clone.ondragstart = drag;
+        ev.target.appendChild(clone);
+        updatePreview();
+      }
+    }
+
+    function deleteItem(ev) {
+      ev.preventDefault();
+      if (draggedElement && draggedElement.parentElement.id === "workspace") {
+        draggedElement.remove();
+        updatePreview();
+      }
+    }
+
+    function generateVisualFormula() {
+      const randomIndex = Math.floor(Math.random() * formulas.length);
+      currentFormula = formulas[randomIndex];
+
+      document.getElementById("originalFormula").innerHTML = `$$ ${currentFormula.expression} $$`;
+      document.getElementById("solveFor").textContent = currentFormula.solve;
+      MathJax.typeset();
+
+      const workspace = document.getElementById("workspace");
+      workspace.innerHTML = "<strong>Drag items here to build your formula:</strong>";
+
+      const preloadItems = [currentFormula.solve, "="];
+      preloadItems.forEach(item => {
+        const el = document.createElement("div");
+        el.textContent = item;
+        el.className = "draggable";
+        el.draggable = true;
+        el.ondragstart = drag;
+        workspace.appendChild(el);
+      });
+
+      const toolbox = document.getElementById("toolbox");
+      toolbox.innerHTML = "<strong>Toolbox:</strong><br>";
+
+      const allItems = [...currentFormula.items];
+/*      for (let i = 0; i <= 9; i++) {
+        allItems.push(i.toString());
+      }
+*/
+      allItems.forEach(item => {
+        const el = document.createElement("div");
+        el.textContent = item;
+        el.className = "draggable";
+        el.draggable = true;
+        el.ondragstart = drag;
+        toolbox.appendChild(el);
+      });
+
+      updatePreview();
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("steps").innerHTML = "";
+    }
+
+    function updatePreview() {
+      const workspaceItems = Array.from(document.getElementById("workspace").children)
+        .filter(el => el.classList.contains("draggable"))
+        .map(el => el.textContent);
+
+      let latex = "";
+      for (let i = 0; i < workspaceItems.length; i++) {
+        const item = workspaceItems[i];
+        const next = workspaceItems[i + 1] || "";
+      if (item === "^2") {
+        latex += "^{2}";
+      } else if (item === "√") {
+        if (next) {
+          latex += `\\sqrt{${next}}`;
+          i++;
+        } else {
+          latex += "\\sqrt{}";
+        }
+      } else if (item === "*") {
+        latex += "* ";
+      } else if (item === "/") {
+        latex += "/";
+      } else if (item === "=") {
+        latex += "=";
+      } else if (item === "(" || item === ")") {
+        latex += item;
+      } else {
+        latex += item;
+      }
+      }
+
+      document.getElementById("mathPreview").innerHTML = `$$ ${latex} $$`;
+      MathJax.typeset();
+    }
+
+    function checkVisualAnswer() {
+      const workspaceItems = Array.from(document.getElementById("workspace").children)
+        .filter(el => el.classList.contains("draggable"))
+        .map(el => el.textContent)
+        .join('');
+      const correct = currentFormula.solution.replace(/\s+/g, '');
+      if (workspaceItems === correct) {
+        document.getElementById("feedback").textContent = "✅ Correct!";
+        document.getElementById("feedback").style.color = "green";
+        document.getElementById("steps").innerHTML = "";
+      } else {
+        document.getElementById("feedback").innerHTML = `❌ Incorrect. Correct answer: $$ ${currentFormula.solution} $$`;
+        document.getElementById("feedback").style.color = "red";
+        const stepsHtml = currentFormula.steps.map(step => `<div>${step}</div>`).join('');
+        document.getElementById("steps").innerHTML = `<strong>Steps to solve:</strong><br>${stepsHtml}`;
+        MathJax.typeset();
+      }
+    }
+
+    generateVisualFormula();
+  </script>
+</body>
+</html>
