@@ -92,7 +92,7 @@ window.MathJax = {
     const formulas = [ 
       {
         expression: "A = B + C - D",
-        solve: "$C$",
+        solve: "C",
         solution: "C=A-B+D",
         solution2: "C=A+D-B",
         items: ["A", "B", "C", "D", "+", "-", "=", "(", ")"],
@@ -105,7 +105,7 @@ window.MathJax = {
       },
       {
         expression: "V = l * w * h",
-        solve: "$h$",
+        solve: "h",
         solution: "h=V/(l*w)",
         solution2:"",
         items: ["V", "l", "w", "h", "*", "/", "=", "(", ")"],
@@ -117,7 +117,7 @@ window.MathJax = {
       },
       {
         expression: "F = m * a",
-        solve: "$m$",
+        solve: "m",
         solution: "m=F/a",
         solution2:"",
         items: ["F", "m", "a", "*", "/", "=", "(", ")"],
@@ -129,7 +129,7 @@ window.MathJax = {
       },
       {
         expression: "P = V^2 / R",
-        solve: "$R$",
+        solve: "R",
         solution: "R=V^2/P",
         solution2:"",
         items: ["P", "V", "R", "^2", "/", "=", "(", ")"],
@@ -141,7 +141,7 @@ window.MathJax = {
       },
       {
         expression: "Q = m * c * ΔT",
-        solve: "$ΔT$",
+        solve: "ΔT",
         solution: "ΔT=Q/(m*c)",
         solution2:"",
         items: ["Q", "m", "c", "ΔT", "*", "/", "=", "(", ")"],
@@ -153,7 +153,7 @@ window.MathJax = {
       },
       {
         expression: "V = I * R",
-        solve: "$R$",
+        solve: "R",
         solution: "R=V/I",
         solution2:"",
         items: ["V", "I", "R", "*", "/", "=", "(", ")"],
@@ -165,7 +165,7 @@ window.MathJax = {
       },
       {
         expression: "P = I * V",
-        solve: "$I$",
+        solve: "I",
         solution: "I=\\frac PV",
         solution2:"",
         items: ["P", "I", "V", "*", "/", "=", "(", ")"],
@@ -225,8 +225,8 @@ window.MathJax = {
       const randomIndex = Math.floor(Math.random() * formulas.length);
       currentFormula = formulas[randomIndex];
 
-      document.getElementById("originalFormula").innerHTML = `$$ ${currentFormula.expression} $$`;
-      document.getElementById("solveFor").textContent = currentFormula.solve;
+      document.getElementById("originalFormula").innerHTML = `${currentFormula.expression}`;
+      document.getElementById("solveFor").textContent = `${currentFormula.solve}$`;
       MathJax.typeset();
 
       const workspace = document.getElementById("workspace");
