@@ -91,16 +91,41 @@ window.MathJax = {
   <script>
     const formulas = [ 
       {
-        expression: "A = B + C - D",
+        expression: "A = B + C − D",
         solve: "C",
-        solution: "C=A-B+D",
-        solution2: "C=A+D-B",
-        items: ["A", "B", "C", "D", "+", "-", "=", "(", ")"],
+        solution: "C=A−B+D",
+        solution2: "C=A+D−B",
+        items: ["A", "B", "C", "D", "+", "−", "=", "(", ")"],
         steps: [
-          "Start with the formula: $$ A = B + C - D $$",
+          "Start with the formula: $$ A = B + C − D $$",
           "Add $D$ to both sides: $$ A + D = B + C $$",
-          "Subtract $B$ from both sides: $$ A + D - B = C $$",
-          "Rearranged: $$ C = A - B + D $$"
+          "Subtract $B$ from both sides: $$ A + D − B = C $$",
+          "Rearranged: $$ C = A − B + D $$"
+        ]
+      },
+      {
+        expression: "A = B + C − D",
+        solve: "B",
+        solution: "B=A−C+D",
+        solution2: "B=A+D−C",
+        items: ["A", "B", "C", "D", "+", "−", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ A = B + C − D $$",
+          "Subtract $C$ from both sides: $$ A − C = B + D $$",
+          "Add $D$ to both sides: $$ A + D − C = B $$",
+          "Rearranged: $$ B = A + D − C $$"
+        ]
+      },
+      {
+        expression: "A = B + C − D",
+        solve: "D",
+        solution: "D=B+C−A",
+        solution2: "",
+        items: ["A", "B", "C", "D", "+", "−", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ A = B + C − D $$",
+          "Add $D$ to both sides: $$ A + D = B + C $$",
+          "Subtract $A$ from both sides: $$ D = B + C − A $$",
         ]
       },
       {
@@ -178,13 +203,13 @@ window.MathJax = {
       {
         expression: "c^2 = a^2 + b^2",
         solve: "b",
-        solution: "b=√(c^2-a^2)",
+        solution: "b=√(c^2−a^2)",
         solution2:"",
-        items: ["a", "b", "c","^2", "+", "-", "=", "√", "(", ")"],
+        items: ["a", "b", "c","^2", "+", "−", "=", "√", "(", ")"],
         steps: [
           "Start with the formula: $$ c^2 = a^2 + b^2 $$",
-          "Subtract $ a^2 $ from both sides: $$ c^2 - a^2 = b^2 $$",
-          "Take the square root of both sides: $$ b = \\sqrt{c^2 - a^2} $$"
+          "Subtract $ a^2 $ from both sides: $$ c^2 − a^2 = b^2 $$",
+          "Take the square root of both sides: $$ b = \\sqrt{c^2 − a^2} $$"
         ]
       }
     ];
@@ -245,8 +270,8 @@ window.MathJax = {
       const toolbox = document.getElementById("toolbox");
       toolbox.innerHTML = "<strong>Toolbox:</strong><br>";
 
-      const allItems = [...currentFormula.items];
-
+      //const allItems = [...currentFormula.items];
+      const allItems = currentFormula.items.map(eq=> `$${eq}$`);
       allItems.forEach(item => {
         const el = document.createElement("div");
         el.textContent = item;
@@ -262,22 +287,24 @@ window.MathJax = {
     }
 
     function updatePreview() {
-      const workspaceItems = Array.from(document.getElementById("workspace").children)
+      const workspaceItems =Array.from(document.getElementById("workspace").children)
         .filter(el => el.classList.contains("draggable"))
         .map(el => el.textContent);
-
+console.log(workspaceItems);
       let latex = "";
       for (let i = 0; i < workspaceItems.length; i++) {
         const item = workspaceItems[i];
         const next = workspaceItems[i + 1] || "";
-      if (item === "^2") {
-        latex += "^{2}";
+        console.log(item,i);
+      if (item.includes("2")) {
+        //const removed = latex.slice(0,latex.lenght -1);
+        latex += "^2"
       } else if (item === "√") {
         if (next) {
           latex += `\\sqrt{${next}}`;
           i++;
         } else {
-          latex += "\\sqrt{}";
+          latex += `\\sqrt{}`;
         }
       } else if (item === "*") {
         latex += "* ";
@@ -290,20 +317,24 @@ window.MathJax = {
       } else {
         latex += item;
       }
-      }
-
+    //console.log(latex,item);  
+    }
+      
       document.getElementById("mathPreview").innerHTML = `$$ ${latex} $$`;
       MathJax.typeset();
     }
 
     function checkVisualAnswer() {
-      const workspaceItems = Array.from(document.getElementById("workspace").children)
+      var workspaceItems = Array.from(document.getElementById("workspace").children)
         .filter(el => el.classList.contains("draggable"))
         .map(el => el.textContent)
         .join('');
+      var workspaceItems = workspaceItems.replace(/2/g,"^2");
+      console.log(currentFormula.solution,workspaceItems);
       const correct = currentFormula.solution.replace(/\s+/g, '');
       const correct2 = currentFormula.solution2.replace(/\s+/g, '');
-      if (workspaceItems === correct || workspaceItems === correct2 ) {
+      console.log(correct,workspaceItems);
+      if (workspaceItems == correct || workspaceItems == correct2 ) {
         document.getElementById("feedback").textContent = "✅ Correct!";
         document.getElementById("feedback").style.color = "green";
         document.getElementById("steps").innerHTML = "";
