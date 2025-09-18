@@ -233,7 +233,8 @@ window.MathJax = {
         clone.draggable = true;
         clone.className = "draggable";
         clone.ondragstart = drag;
-        ev.target.appendChild(clone);
+        // Always append to the workspace container, not the drop target
+        document.getElementById("workspace").appendChild(clone);
         updatePreview();
       }
     }
