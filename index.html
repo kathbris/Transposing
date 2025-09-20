@@ -129,25 +129,49 @@ window.MathJax = {
         ]
       },
       {
-        expression: "V = l * w * h",
+        expression: "V = l ∗ w ∗ h",
         solve: "h",
-        solution: "h=V/(l*w)",
-        solution2:"",
-        items: ["V", "l", "w", "h", "*", "/", "=", "(", ")"],
+        solution: "h=V/(l∗w)",
+        solution2:"h=V/(w∗l)",
+        items: ["V", "l", "w", "h", "∗", "/", "=", "(", ")"],
         steps: [
-          "Start with the formula: $$ V = l * w * h $$",
-          "Divide both sides by $l * w$ : $$ \\frac {V}{l * w} = h $$",
-          "Rearranged: $$ h = \\frac {V}{l * w} $$"
+          "Start with the formula: $$ V = l ∗ w ∗ h $$",
+          "Divide both sides by $l ∗ w$ : $$ \\frac {V}{l ∗ w} = h $$",
+          "Rearranged: $$ h = \\frac {V}{l ∗ w} $$"
+        ]
+      },
+            {
+        expression: "V = l ∗ w ∗ h",
+        solve: "w",
+        solution: "h=V/(l∗w)",
+        solution2:"h=V/(w∗l)",
+        items: ["V", "l", "w", "h", "∗", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ V = l ∗ w ∗ h $$",
+          "Divide both sides by $l ∗ h$ : $$ \\frac {V}{l ∗ h} = w $$",
+          "Rearranged: $$ w = \\frac {V}{l ∗ h} $$"
+        ]
+      },
+            {
+        expression: "V = l ∗ w ∗ h",
+        solve: "l",
+        solution: "l=V/(w∗h)",
+        solution2:"l=V/(h∗w)",
+        items: ["V", "l", "w", "h", "∗", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ V = l ∗ w ∗ h $$",
+          "Divide both sides by $w ∗ h$ : $$ \\frac {V}{w ∗ h} = l $$",
+          "Rearranged: $$ l = \\frac {V}{w ∗ h} $$"
         ]
       },
       {
-        expression: "F = m * a",
+        expression: "F = m ∗ a",
         solve: "m",
         solution: "m=F/a",
         solution2:"",
-        items: ["F", "m", "a", "*", "/", "=", "(", ")"],
+        items: ["F", "m", "a", "∗", "/", "=", "(", ")"],
         steps: [
-          "Start with the formula: $$ F = m * a $$",
+          "Start with the formula: $$ F = m ∗ a $$",
           "Divide both sides by $a$: $$ \\frac Fa = m $$",
           "Rearranged: $$ m = \\frac Fa $$"
         ]
@@ -157,45 +181,67 @@ window.MathJax = {
         solve: "R",
         solution: "R=V^2/P",
         solution2:"",
-        items: ["P", "V", "R", "^2", "/", "=", "(", ")"],
+        items: ["P", "V", "R", "^2", "/","∗","√", "=", "(", ")"],
         steps: [
           "Start with the formula: $$ P = \\frac {V^2}{R} $$",
-          "Multiply both sides by $R$: $$ P * R = V^2 $$",
+          "Multiply both sides by $R$: $$ P ∗ R = V^2 $$",
+          "Divide both sides by $P$: $$ R = \\frac {V^2}{P} $$"
+        ]
+      },{
+        expression: "P = V^2 / R",
+        solve: "V",
+        solution: "V=√(P∗R)",
+        solution2:"V=√(R∗P)",
+        items: ["P", "V", "R", "^2", "/","∗","√", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ P = \\frac {V^2}{R} $$",
+          "Multiply both sides by $R$: $$ P ∗ R = V^2 $$",
           "Divide both sides by $P$: $$ R = \\frac {V^2}{P} $$"
         ]
       },
       {
-        expression: "Q = m * c * ΔT",
+        expression: "Q = m ∗ c ∗ ΔT",
         solve: "ΔT",
-        solution: "ΔT=Q/(m*c)",
+        solution: "ΔT=Q/(m∗c)",
         solution2:"",
-        items: ["Q", "m", "c", "ΔT", "*", "/", "=", "(", ")"],
+        items: ["Q", "m", "c", "ΔT", "∗", "/", "=", "(", ")"],
         steps: [
-          "Start with the formula: $$ Q = m * c * ΔT $$",
-          "Divide both sides by $m * c$:  $$\\frac {Q}{m * c} = ΔT $$",
-          "Rearranged: $$ ΔT = \\frac {Q}{m * c} $$"
+          "Start with the formula: $$ Q = m ∗ c ∗ ΔT $$",
+          "Divide both sides by $m ∗ c$:  $$\\frac {Q}{m ∗ c} = ΔT $$",
+          "Rearranged: $$ ΔT = \\frac {Q}{m ∗ c} $$"
         ]
       },
       {
-        expression: "V = I * R",
+        expression: "I = E / R",
         solve: "R",
-        solution: "R=V/I",
+        solution: "R=E/I",
         solution2:"",
-        items: ["V", "I", "R", "*", "/", "=", "(", ")"],
+        items: ["E", "I", "R", "∗", "/", "=", "(", ")"],
         steps: [
-          "Start with the formula: $$ V = I * R $$",
-          "Divide both sides by $I$ : $$ \\frac VI = R $$",
-          "Rearranged:$$ R = \\frac VI $$"
+          "Start with the formula: $$ I = \\frac EI $$",
+          "Multiply both sides by $R$ : $$ I ∗ R = E $$",
+          "Divide both sides by $I$ : $$ R = //frac EI $$"
+        ]
+      },      {
+        expression: "I = E / R",
+        solve: "E",
+        solution: "E=I∗R",
+        solution2:"E=R∗I",
+        items: ["E", "I", "R", "∗", "/", "=", "(", ")"],
+        steps: [
+          "Start with the formula: $$ I = \\frac EI $$",
+          "Multiply both sides by $R$ : $$ I ∗ R = E $$",
+          "Rearranged : $$ E = I ∗ R $$"
         ]
       },
       {
-        expression: "P = I * V",
+        expression: "P = I ∗ V",
         solve: "I",
         solution: "I=\\frac PV",
         solution2:"",
-        items: ["P", "I", "V", "*", "/", "=", "(", ")"],
+        items: ["P", "I", "V", "∗", "/", "=", "(", ")"],
         steps: [
-          "Start with the formula: $$ P = I * V $$",
+          "Start with the formula: $$ P = I ∗ V $$",
           "Divide both sides by V: $$ \\frac PV = I $$",
           "Rearranged: $$ I = \\frac PV $$"
         ]
@@ -307,8 +353,8 @@ console.log(workspaceItems);
         } else {
           latex += `\\sqrt{}`;
         }
-      } else if (item === "*") {
-        latex += "* ";
+      } else if (item === "∗") {
+        latex += "∗";
       } else if (item === "/") {
         latex += "/";
       } else if (item === "=") {
